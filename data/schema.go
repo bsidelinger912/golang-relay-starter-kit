@@ -11,6 +11,7 @@ var widgetType *graphql.Object
 var nodeDefinitions *relay.NodeDefinitions
 var widgetConnection *relay.GraphQLConnectionDefinitions
 
+//Schema stuff
 var Schema graphql.Schema
 
 func init() {
@@ -74,10 +75,10 @@ func init() {
 				Type:        widgetConnection.ConnectionType,
 				Description: "A person's collection of widgets",
 				Args:        relay.ConnectionArgs,
-				Resolve: func(p graphql.ResolveParams) interface{} {
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					args := relay.NewConnectionArguments(p.Args)
 					dataSlice := WidgetsToInterfaceSlice(GetWidgets()...)
-					return relay.ConnectionFromArray(dataSlice, args)
+					return relay.ConnectionFromArray(dataSlice, args), nil
 				},
 			},
 		},
@@ -98,8 +99,8 @@ func init() {
 			// Add you own root fields here
 			"viewer": &graphql.Field{
 				Type: userType,
-				Resolve: func(p graphql.ResolveParams) interface{} {
-					return GetViewer()
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					return GetViewer(), nil
 				},
 			},
 		},
