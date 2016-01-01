@@ -1,53 +1,18 @@
 package data
 
-// Model structs
-type User struct {
-	Id      string    `json:"id"`
-	Name    string    `json:"name"`
-	Widgets []*Widget `json:"widgets"`
-}
-
-type Widget struct {
+//Post - Data model structs
+type Post struct {
 	Id   string `json:"id"`
-	Name string `json:"name"`
+	Text string `json:"text"`
 }
 
 // Mock data
-var viewer = &User{
+var latestPost = &Post{
 	Id:   "1",
-	Name: "Anonymous",
-}
-var widgets = []*Widget{
-	&Widget{"0", "What's-it"},
-	&Widget{"1", "Who's-it"},
-	&Widget{"2", "How's-it"},
+	Text: "Hello World",
 }
 
-// Data accessors
-func GetUser(id string) *User {
-	if id == viewer.Id {
-		return viewer
-	}
-	return nil
-}
-func GetViewer() *User {
-	return viewer
-}
-func GetWidget(id string) *Widget {
-	for _, widget := range widgets {
-		if widget.Id == id {
-			return widget
-		}
-	}
-	return nil
-}
-func GetWidgets() []*Widget {
-	return widgets
-}
-func WidgetsToInterfaceSlice(widgets ...*Widget) []interface{} {
-	var interfaceSlice []interface{} = make([]interface{}, len(widgets))
-	for i, d := range widgets {
-		interfaceSlice[i] = d
-	}
-	return interfaceSlice
+// Data getters/setters
+func GetLatestPost() *Post {
+	return latestPost
 }
