@@ -18,7 +18,11 @@
             "always"
         ],
         "comma-dangle": [
-          2, "always-multiline"
+          2,
+          "always-multiline"
+        ],
+        "no-console": [
+          0
         ]
     },
     "env": {
