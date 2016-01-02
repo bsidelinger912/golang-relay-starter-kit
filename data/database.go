@@ -1,15 +1,16 @@
 package data
 
-// Model structs
+//User Model structs
 type User struct {
-	Id      string    `json:"id"`
-	Name    string    `json:"name"`
-	Widgets []*Widget `json:"widgets"`
+	Id     string   `json:"id"`
+	Name   string   `json:"name"`
+	Visits []*Visit `json:"visits"`
 }
 
-type Widget struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+//Visit struct
+type Visit struct {
+	Id       string `json:"id"`
+	Location string `json:"name"`
 }
 
 // Mock data
@@ -17,36 +18,44 @@ var viewer = &User{
 	Id:   "1",
 	Name: "Anonymous",
 }
-var widgets = []*Widget{
-	&Widget{"0", "What's-it"},
-	&Widget{"1", "Who's-it"},
-	&Widget{"2", "How's-it"},
+var visits = []*Visit{
+	&Visit{"0", "Eureka"},
+	&Visit{"1", "Paxtis"},
+	&Visit{"2", "Capitol Grill"},
 }
 
-// Data accessors
+//GetUser will return a user given an ID.
 func GetUser(id string) *User {
 	if id == viewer.Id {
 		return viewer
 	}
 	return nil
 }
+
+//GetViewer will get the current user
 func GetViewer() *User {
 	return viewer
 }
-func GetWidget(id string) *Widget {
-	for _, widget := range widgets {
+
+//GetVisit will find a visit for this user by ID
+func GetVisit(id string) *Visit {
+	for _, widget := range visits {
 		if widget.Id == id {
 			return widget
 		}
 	}
 	return nil
 }
-func GetWidgets() []*Widget {
-	return widgets
+
+//GetVisits will give all visits
+func GetVisits() []*Visit {
+	return visits
 }
-func WidgetsToInterfaceSlice(widgets ...*Widget) []interface{} {
-	var interfaceSlice []interface{} = make([]interface{}, len(widgets))
-	for i, d := range widgets {
+
+//VisitsToInterfaceSlice casts the visits to interfaces
+func VisitsToInterfaceSlice(visits ...*Visit) []interface{} {
+	var interfaceSlice = make([]interface{}, len(visits))
+	for i, d := range visits {
 		interfaceSlice[i] = d
 	}
 	return interfaceSlice

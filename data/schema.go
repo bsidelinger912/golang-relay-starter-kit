@@ -6,10 +6,10 @@ import (
 )
 
 var userType *graphql.Object
-var widgetType *graphql.Object
+var visitType *graphql.Object
 
 var nodeDefinitions *relay.NodeDefinitions
-var widgetConnection *relay.GraphQLConnectionDefinitions
+var visitConnection *relay.GraphQLConnectionDefinitions
 
 //Schema stuff
 var Schema graphql.Schema
@@ -28,8 +28,8 @@ func init() {
 			if resolvedID.Type == "User" {
 				return GetUser(resolvedID.ID)
 			}
-			if resolvedID.Type == "Widget" {
-				return GetWidget(resolvedID.ID)
+			if resolvedID.Type == "Visit" {
+				return GetVisit(resolvedID.ID)
 			}
 			return nil
 		},
@@ -37,8 +37,8 @@ func init() {
 			switch value.(type) {
 			case *User:
 				return userType
-			case *Widget:
-				return widgetType
+			case *Visit:
+				return visitType
 			}
 			return nil
 		},
@@ -47,11 +47,11 @@ func init() {
 	/**
 	 * Define your own types here
 	 */
-	widgetType = graphql.NewObject(graphql.ObjectConfig{
-		Name:        "Widget",
+	visitType = graphql.NewObject(graphql.ObjectConfig{
+		Name:        "Visit",
 		Description: "A shiny widget'",
 		Fields: graphql.Fields{
-			"id": relay.GlobalIDField("Widget", nil),
+			"id": relay.GlobalIDField("Visit", nil),
 			"name": &graphql.Field{
 				Description: "The name of the widget",
 				Type:        graphql.String,
@@ -61,9 +61,9 @@ func init() {
 			nodeDefinitions.NodeInterface,
 		},
 	})
-	widgetConnection = relay.ConnectionDefinitions(relay.ConnectionConfig{
-		Name:     "WidgetConnection",
-		NodeType: widgetType,
+	visitConnection = relay.ConnectionDefinitions(relay.ConnectionConfig{
+		Name:     "VisitConnection",
+		NodeType: visitType,
 	})
 
 	userType = graphql.NewObject(graphql.ObjectConfig{
@@ -72,12 +72,13 @@ func init() {
 		Fields: graphql.Fields{
 			"id": relay.GlobalIDField("User", nil),
 			"widgets": &graphql.Field{
-				Type:        widgetConnection.ConnectionType,
+				Type:        visitConnection.ConnectionType,
 				Description: "A person's collection of widgets",
 				Args:        relay.ConnectionArgs,
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					args := relay.NewConnectionArguments(p.Args)
-					dataSlice := WidgetsToInterfaceSlice(GetWidgets()...)
+					dataSlice := VisitsToInterfaceSlice(GetVisits()...)
+
 					return relay.ConnectionFromArray(dataSlice, args), nil
 				},
 			},
