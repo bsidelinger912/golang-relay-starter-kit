@@ -9,6 +9,7 @@ const GRAPHQL_PORT = 8080;
 // Serve the Relay app
 var compiler = webpack({
   entry: path.resolve(__dirname, 'js', 'app.js'),
+  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -17,8 +18,13 @@ var compiler = webpack({
         query: {stage: 0, plugins: ['./build/babelRelayPlugin']},
         test: /\.js$/,
       },
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
+      },
     ],
   },
+
   output: {filename: 'app.js', path: '/'},
 });
 
