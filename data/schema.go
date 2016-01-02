@@ -49,11 +49,11 @@ func init() {
 	 */
 	visitType = graphql.NewObject(graphql.ObjectConfig{
 		Name:        "Visit",
-		Description: "A shiny widget'",
+		Description: "Visits to mystery shops",
 		Fields: graphql.Fields{
 			"id": relay.GlobalIDField("Visit", nil),
-			"name": &graphql.Field{
-				Description: "The name of the widget",
+			"location": &graphql.Field{
+				Description: "The location of the Visit",
 				Type:        graphql.String,
 			},
 		},
@@ -71,9 +71,17 @@ func init() {
 		Description: "A person who uses our app",
 		Fields: graphql.Fields{
 			"id": relay.GlobalIDField("User", nil),
-			"widgets": &graphql.Field{
+			"name": &graphql.Field{
+				Description: "The user's name",
+				Type:        graphql.String,
+			},
+			"email": &graphql.Field{
+				Description: "The user's email address",
+				Type:        graphql.String,
+			},
+			"visits": &graphql.Field{
 				Type:        visitConnection.ConnectionType,
-				Description: "A person's collection of widgets",
+				Description: "A person's past mystery shop visits",
 				Args:        relay.ConnectionArgs,
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					args := relay.NewConnectionArguments(p.Args)

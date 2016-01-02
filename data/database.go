@@ -4,19 +4,21 @@ package data
 type User struct {
 	Id     string   `json:"id"`
 	Name   string   `json:"name"`
+	Email  string   `json:"email"`
 	Visits []*Visit `json:"visits"`
 }
 
 //Visit struct
 type Visit struct {
 	Id       string `json:"id"`
-	Location string `json:"name"`
+	Location string `json:"location"`
 }
 
 // Mock data
 var viewer = &User{
-	Id:   "1",
-	Name: "Anonymous",
+	Id:    "1",
+	Name:  "Brooke",
+	Email: "brooke@gmail.com",
 }
 var visits = []*Visit{
 	&Visit{"0", "Eureka"},
@@ -39,9 +41,9 @@ func GetViewer() *User {
 
 //GetVisit will find a visit for this user by ID
 func GetVisit(id string) *Visit {
-	for _, widget := range visits {
-		if widget.Id == id {
-			return widget
+	for _, visit := range visits {
+		if visit.Id == id {
+			return visit
 		}
 	}
 	return nil
