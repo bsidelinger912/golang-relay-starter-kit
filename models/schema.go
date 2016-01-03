@@ -3,8 +3,6 @@ package models
 import (
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/relay"
-
-	"log"
 )
 
 var shopperType *graphql.Object
@@ -109,9 +107,14 @@ func init() {
 			// Add you own root fields here
 			"viewer": &graphql.Field{
 				Type: shopperType,
+				Args: graphql.FieldConfigArgument{
+				    "id": &graphql.ArgumentConfig{
+				        Type: graphql.String,
+				    },
+				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					log.Print("resolving viewer")
-					return env.db.GetShopper("2"), nil
+					id := p.Args["id"].(string)
+					return env.db.GetShopper(id), nil
 				},
 			},
 		},
