@@ -4,15 +4,20 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/bsidelinger912/golang-relay-starter-kit/data"
+	"github.com/bsidelinger912/golang-relay-starter-kit/models"
 	"github.com/graphql-go/handler"
 )
 
 func main() {
+	//connect the db here, this way the models are independant of their data source
+	dbErr := models.NewDB("user=benjaminsidelinger dbname=mystery_shopper password=Cheet@h912 host=localhost port=5432 sslmode=disable")
+	if dbErr != nil {
+		log.Panic(dbErr)
+	}
 
 	// simplest relay-compliant graphql server HTTP handler
 	h := handler.New(&handler.Config{
-		Schema: &data.Schema,
+		Schema: &models.Schema,
 		Pretty: true,
 	})
 

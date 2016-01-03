@@ -31,7 +31,7 @@ class Visit extends React.Component {
 export default Relay.createContainer(App, {
   fragments: {
     viewer: () => Relay.QL`
-      fragment on User {
+      fragment on Shopper {
         name,
         email,
         visits(first: 10) {

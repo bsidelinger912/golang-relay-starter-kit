@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/bsidelinger912/golang-relay-starter-kit/data"
+	"github.com/bsidelinger912/golang-relay-starter-kit/models"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/graphql/testutil"
 )
@@ -14,7 +14,7 @@ import (
 func main() {
 	// Save JSON of full schema introspection for Babel Relay Plugin to use
 	result := graphql.Do(graphql.Params{
-		Schema:        data.Schema,
+		Schema:        models.Schema,
 		RequestString: testutil.IntrospectionQuery,
 	})
 	if result.HasErrors() {
@@ -25,7 +25,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("ERROR: %v", err)
 	}
-	err = ioutil.WriteFile("../data/schema.json", b, os.ModePerm)
+	err = ioutil.WriteFile("../models/schema.json", b, os.ModePerm)
 	if err != nil {
 		log.Fatalf("ERROR: %v", err)
 	}
