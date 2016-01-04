@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/relay"
 )
@@ -28,7 +30,7 @@ func init() {
 				return env.db.GetShopper(resolvedID.ID)
 			}
 			if resolvedID.Type == "Visit" {
-				return GetVisit(resolvedID.ID)
+				return env.db.GetVisit(resolvedID.ID)
 			}
 			return nil
 		},
@@ -83,8 +85,9 @@ func init() {
 				Description: "A person's past mystery shop visits",
 				Args:        relay.ConnectionArgs,
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					log.Print(p.Args)
 					args := relay.NewConnectionArguments(p.Args)
-					dataSlice := VisitsToInterfaceSlice(GetVisits()...)
+					dataSlice := VisitsToInterfaceSlice(env.db.GetVisits()...)
 
 					return relay.ConnectionFromArray(dataSlice, args), nil
 				},
@@ -108,9 +111,9 @@ func init() {
 			"viewer": &graphql.Field{
 				Type: shopperType,
 				Args: graphql.FieldConfigArgument{
-				    "id": &graphql.ArgumentConfig{
-				        Type: graphql.String,
-				    },
+					"id": &graphql.ArgumentConfig{
+						Type: graphql.String,
+					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					id := p.Args["id"].(string)

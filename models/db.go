@@ -9,6 +9,8 @@ import (
 //TODO: learn more about all this vv
 type Datastore interface {
 	GetShopper(id string) *Shopper
+	GetVisits() []*Visit
+	GetVisit(id string) *Visit
 }
 
 type DB struct {

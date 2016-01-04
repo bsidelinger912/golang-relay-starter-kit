@@ -10,7 +10,7 @@ require('./app.scss');
 ReactDOM.render(
   <Relay.RootContainer
     Component={App}
-    route={new AppHomeRoute({ userId: '1' })}
+    route={new AppHomeRoute({ userId: '2' })}
   />,
   document.getElementById('root')
 );

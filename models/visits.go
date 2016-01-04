@@ -2,28 +2,56 @@ package models
 
 //Visit struct
 type Visit struct {
-	Id       string `json:"id"`
-	Location string `json:"location"`
-}
-
-var visits = []*Visit{
-	&Visit{"0", "Eureka"},
-	&Visit{"1", "Paxtis"},
-	&Visit{"2", "Capitol Grill"},
+	Id           string `json:"id"`
+	LocationName string `json:"location"`
 }
 
 //GetVisit will find a visit for this user by ID
-func GetVisit(id string) *Visit {
-	for _, visit := range visits {
-		if visit.Id == id {
-			return visit
+func (db *DB) GetVisit(id string) *Visit {
+	stmt, err := db.Prepare("SELECT id, location_name FROM visits WHERE id=$1")
+	rows, err := stmt.Query(id)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	visit := new(Visit)
+	for rows.Next() {
+		err := rows.Scan(&visit.Id, &visit.LocationName)
+		if err != nil {
+			return nil
 		}
 	}
-	return nil
+	if err = rows.Err(); err != nil {
+		return nil
+	}
+	return visit
 }
 
 //GetVisits will give all visits
-func GetVisits() []*Visit {
+func (db *DB) GetVisits() []*Visit {
+	//TODO figure how to get this from connection args
+	shopperID := "2"
+
+	stmt, err := db.Prepare("SELECT id, location_name FROM visits WHERE shopper_id=$1")
+	rows, err := stmt.Query(shopperID)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+
+	visits := make([]*Visit, 0)
+	for rows.Next() {
+		visit := new(Visit)
+		err := rows.Scan(&visit.Id, &visit.LocationName)
+		if err != nil {
+			return nil
+		}
+		visits = append(visits, visit)
+	}
+	if err = rows.Err(); err != nil {
+		return nil
+	}
 	return visits
 }
 
